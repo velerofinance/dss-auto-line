@@ -73,7 +73,7 @@ contract DssAutoLine {
 
     /**
         @dev Add or update an ilk
-        @param ilk    Collateral type (ex. ETH-A)
+        @param ilk    Collateral type (ex. VLX-A)
         @param line   Collateral maximum debt ceiling that can be configured [RAD]
         @param gap    Amount of collateral to step [RAD]
         @param ttl    Minimum time between increase [seconds]
@@ -87,7 +87,7 @@ contract DssAutoLine {
 
     /**
         @dev Remove an ilk
-        @param ilk    Collateral type (ex. ETH-A)
+        @param ilk    Collateral type (ex. VLX-A)
     */
     function remIlk(bytes32 ilk) external auth {
         delete ilks[ilk];
@@ -110,7 +110,7 @@ contract DssAutoLine {
     }
 
     /*** Auto-Line Update ***/
-    // @param  _ilk  The bytes32 ilk tag to adjust (ex. "ETH-A")
+    // @param  _ilk  The bytes32 ilk tag to adjust (ex. "VLX-A")
     // @return       The ilk line value as uint256
     function exec(bytes32 _ilk) external returns (uint256) {
         (uint256 Art, uint256 rate,, uint256 line,) = vat.ilks(_ilk);

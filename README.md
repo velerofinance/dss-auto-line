@@ -4,15 +4,15 @@ Automatic debt ceiling adjustments
 
 ## Overview
 
-Minting too much DAI, even if well above collateralization ratios, can become too risky. Hence the *Debt Ceiling*, i.e. the maximum amount of DAI that can be minted for a specific collateral type.
+Minting too much USDV, even if well above collateralization ratios, can become too risky. Hence the *Debt Ceiling*, i.e. the maximum amount of USDV that can be minted for a specific collateral type.
 
 In order to give the debt ceiling more flexibility, this Instant Access Module allows the broader community to adjust the debt ceiling within fixed parameters set forth by token holders.
 
-Check out [MIP27](https://forum.makerdao.com/t/mip27-debt-ceiling-instant-access-module) for more details and discussions.
+[comment]: <> (Check out [MIP27]&#40;https://forum.makerdao.com/t/mip27-debt-ceiling-instant-access-module&#41; for more details and discussions.)
 
 ## Command-line usage
 
-If you're interested in updating the debt ceiling of a collateral type (ETH-B in this example), follow these steps:
+If you're interested in updating the debt ceiling of a collateral type (VLX-B in this example), follow these steps:
 
 ### 1. Get the contract addresses from the chainlog
 
@@ -24,16 +24,16 @@ $ export MCD_IAM_AUTO_LINE=$(seth call 0xdA0Ab1e0017DEbCd72Be8599041a2aa3bA7e740
 ### 2. Get the current debt ceiling from the vat
 
 ```
-$ seth call $MCD_VAT 'ilks(bytes32)(uint256,uint256,uint256,uint256,uint256)' $(seth --from-ascii ETH-B | seth --to-bytes32) | sed -n 4p | seth --to-fix 45
+$ seth call $MCD_VAT 'ilks(bytes32)(uint256,uint256,uint256,uint256,uint256)' $(seth --from-ascii VLX-B | seth --to-bytes32) | sed -n 4p | seth --to-fix 45
 5009714
 ```
 
-This means that the current debt ceiling for ETH-B is 5,009,714 DAI.
+This means that the current debt ceiling for VLX-B is 5,009,714 USDV.
 
 ### 3. Check the maximum debt ceiling from this module
 
 ```
-$ seth call $MCD_IAM_AUTO_LINE 'ilks(bytes32)(uint256,uint256,uint48,uint48,uint48)' $(seth --from-ascii ETH-B | seth --to-bytes32) | sed -n 1p | seth --to-fix 45
+$ seth call $MCD_IAM_AUTO_LINE 'ilks(bytes32)(uint256,uint256,uint48,uint48,uint48)' $(seth --from-ascii VLX-B | seth --to-bytes32) | sed -n 1p | seth --to-fix 45
 6000000
 ```
 
@@ -42,21 +42,21 @@ $ seth call $MCD_IAM_AUTO_LINE 'ilks(bytes32)(uint256,uint256,uint48,uint48,uint
 Get the seconds elapsed since the last time the debt was increased:
 
 ```
-$ echo "$(date +%s) - $(seth call $MCD_IAM_AUTO_LINE 'ilks(bytes32)(uint256,uint256,uint48,uint48,uint48)' $(seth --from-ascii ETH-B | seth --to-bytes32) | sed -n 5p)" | bc
+$ echo "$(date +%s) - $(seth call $MCD_IAM_AUTO_LINE 'ilks(bytes32)(uint256,uint256,uint48,uint48,uint48)' $(seth --from-ascii VLX-B | seth --to-bytes32) | sed -n 5p)" | bc
 4288088
 ```
 
 Compare the above result with the minimum wait time:
 
 ```
-$ seth call $MCD_IAM_AUTO_LINE 'ilks(bytes32)(uint256,uint256,uint48,uint48,uint48)' $(seth --from-ascii ETH-B | seth --to-bytes32) | sed -n 3p
+$ seth call $MCD_IAM_AUTO_LINE 'ilks(bytes32)(uint256,uint256,uint48,uint48,uint48)' $(seth --from-ascii VLX-B | seth --to-bytes32) | sed -n 3p
 43200
 ```
 
 ### 5. Update the debt ceiling
 
 ```
-$ ETH_GAS=80000 seth send $MCD_IAM_AUTO_LINE 'exec(bytes32)' $(seth --from-ascii ETH-B | seth --to-bytes32)
+$ ETH_GAS=80000 seth send $MCD_IAM_AUTO_LINE 'exec(bytes32)' $(seth --from-ascii VLX-B | seth --to-bytes32)
 seth-send: Published transaction with 36 bytes of calldata.
 seth-send: 0xaeb25b838d1c96be038a065f79fa85c6bbff55ed64a13c7bc3bf83f3e8fa9f94
 seth-send: Waiting for transaction receipt........
@@ -66,7 +66,7 @@ seth-send: Transaction included in block 23937434.
 ### 6. Check the new debt ceiling in the vat
 
 ```
-seth call $MCD_VAT 'ilks(bytes32)(uint256,uint256,uint256,uint256,uint256)' $(seth --from-ascii ETH-B | seth --to-bytes32) | sed -n 4p | seth --to-fix 45
+seth call $MCD_VAT 'ilks(bytes32)(uint256,uint256,uint256,uint256,uint256)' $(seth --from-ascii VLX-B | seth --to-bytes32) | sed -n 4p | seth --to-fix 45
 5021462
 ```
 
@@ -77,7 +77,7 @@ seth call $MCD_VAT 'ilks(bytes32)(uint256,uint256,uint256,uint256,uint256)' $(se
 This mapping stores all the information related to an ilk. You can obtain it with the following command:
 
 ```
-seth call $MCD_IAM_AUTO_LINE 'ilks(bytes32)(uint256,uint256,uint48,uint48,uint48)' $(seth --from-ascii ETH-B | seth --to-bytes32)
+seth call $MCD_IAM_AUTO_LINE 'ilks(bytes32)(uint256,uint256,uint48,uint48,uint48)' $(seth --from-ascii VLX-B | seth --to-bytes32)
 50000000000000000000000000000000000000000000000000000
 5000000000000000000000000000000000000000000000000000
 43200
